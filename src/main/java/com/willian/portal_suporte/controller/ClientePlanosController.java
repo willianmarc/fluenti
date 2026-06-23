@@ -1,45 +1,50 @@
 package com.willian.portal_suporte.controller;
 
 import java.util.List;
-
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.willian.portal_suporte.entity.ClientePlanos;
-import com.willian.portal_suporte.repository.ClientePlanosRepository;
+import com.willian.portal_suporte.service.ClientePlanosService;
 
 @RestController
 @RequestMapping("/cliente-planos")
 public class ClientePlanosController {
 
-    private final ClientePlanosRepository clientePlanosRepository;
+    private final ClientePlanosService clientePlanosService;
 
-    public ClientePlanosController(ClientePlanosRepository clientePlanosRepository) {
-        this.clientePlanosRepository = clientePlanosRepository;
+    public ClientePlanosController(ClientePlanosService clientePlanosService) {
+        this.clientePlanosService = clientePlanosService;
     }
 
     @GetMapping
     public List<ClientePlanos> listar() {
-        return clientePlanosRepository.findAll();
+        return clientePlanosService.listar();
     }
 
     @GetMapping("/{id}")
     public ClientePlanos buscarPorId(@PathVariable Long id) {
-        return clientePlanosRepository.findById(id).orElse(null);
+        return clientePlanosService.findById(id);
     }
 
     @PostMapping
     public ClientePlanos cadastrar(@RequestBody ClientePlanos clientePlanos) {
-        return clientePlanosRepository.save(clientePlanos);
+        return clientePlanosService.insert(clientePlanos);
     }
 
     @PutMapping("/{id}")
     public ClientePlanos atualizar(@PathVariable Long id, @RequestBody ClientePlanos clientePlanos) {
-        clientePlanos.setId(id);
-        return clientePlanosRepository.save(clientePlanos);
+        return clientePlanosService.update(id, clientePlanos);
     }
 
     @DeleteMapping("/{id}")
     public void deletar(@PathVariable Long id) {
-        clientePlanosRepository.deleteById(id);
+        clientePlanosService.delete(id);
     }
 }
