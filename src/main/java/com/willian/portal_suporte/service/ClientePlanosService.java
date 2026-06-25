@@ -3,6 +3,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import com.willian.portal_suporte.entity.ClientePlanos;
 import com.willian.portal_suporte.repository.ClientePlanosRepository;
+import com.willian.portal_suporte.service.exceptions.ResourceNotFoundException;
 
 @Service
 public class ClientePlanosService {
@@ -18,7 +19,7 @@ public class ClientePlanosService {
     }
 
     public ClientePlanos findById(Long id) {
-        return clientePlanosRepository.findById(id).get();
+        return clientePlanosRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(id));
     }
 
     public ClientePlanos insert(ClientePlanos clientePlanos) {
@@ -26,11 +27,14 @@ public class ClientePlanosService {
     }
 
     public ClientePlanos update(Long id, ClientePlanos clientePlanos) {
-        clientePlanos.setId(id);
-        return clientePlanosRepository.save(clientePlanos);
+        ClientePlanos clientePlanosExistente = clientePlanosRepository.findById(id).orElseThrow(()->new ResourceNotFoundException(id));
+        clientePlanosExistente.setPlano(clientePlanos.getPlano());
+       
+        return clientePlanosRepository.save(clientePlanosExistente);
     }
 
     public void delete(Long id) {
+    	clientePlanosRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
         clientePlanosRepository.deleteById(id);
     }
 }

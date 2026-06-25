@@ -2,9 +2,9 @@ package com.willian.portal_suporte.service;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
+import com.willian.portal_suporte.dto.UsuarioDTO;
 
 import com.willian.portal_suporte.entity.Usuario;
 import com.willian.portal_suporte.repository.UsuarioRepository;
@@ -18,13 +18,18 @@ public class UsuarioService {
 		this.usuarioRepository = usuarioRepository;
 	}
 
-	public List<Usuario> listarUsuario() {
-		return usuarioRepository.findAll();
+	public List<UsuarioDTO> listarUsuario() {
+	    List<Usuario> lista = usuarioRepository.findAll();
+
+	    return lista.stream()
+	            .map(UsuarioDTO::new)
+	            .toList();
 	}
 
-	public Usuario findById(Long id) {
-		Optional<Usuario> usuario = usuarioRepository.findById(id);
-		return usuario.orElseThrow(()-> new ResourceNotFoundException(id));
+	public UsuarioDTO findById(Long id) {
+		Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+
+		return new UsuarioDTO(usuario);
 	}
 
 	public Usuario insert(Usuario usuario) {
@@ -32,23 +37,19 @@ public class UsuarioService {
 	}
 
 	public Usuario update(Long id, Usuario usuario) {
-	    Optional<Usuario> usuarioExistente = usuarioRepository.findById(id);
-
-	    usuarioExistente.orElseThrow(() -> new ResourceNotFoundException(id));
-
-	    usuario.setId(id);
-
-	    return usuarioRepository.save(usuario);
+		Usuario usuarioExistente = usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+		usuarioExistente.setNome(usuario.getNome());
+		usuarioExistente.setEmail(usuario.getEmail());
+		usuarioExistente.setAtivo(usuario.isAtivo());
+		
+		return usuarioRepository.save(usuarioExistente);
 	}
-	
 
 	public void delete(Long id) {
+		usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
 
-	    Optional<Usuario> usuario = usuarioRepository.findById(id);
+		usuarioRepository.deleteById(id);
 
-	    usuario.orElseThrow(() -> new ResourceNotFoundException(id));
-
-	    usuarioRepository.deleteById(id);
 	}
 
 }

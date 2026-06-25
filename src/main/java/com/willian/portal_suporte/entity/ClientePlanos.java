@@ -12,8 +12,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+
 @Entity
 @Table(name = "cliente_planos")
 public class ClientePlanos {

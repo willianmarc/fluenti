@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.*;
 
+import com.willian.portal_suporte.dto.UsuarioDTO;
 import com.willian.portal_suporte.entity.Usuario;
 import com.willian.portal_suporte.service.UsuarioService;
 
@@ -18,12 +19,12 @@ public class UsuarioController {
 	}
 
 	@GetMapping
-	public List<Usuario> listarUsuario() {
+	public List<UsuarioDTO> listarUsuario() {
 		return usuarioService.listarUsuario();
 	}
 
 	@GetMapping("/{id}")
-	public Usuario buscarPorId(@PathVariable Long id) {
+	public UsuarioDTO buscarPorId(@PathVariable Long id) {
 		return usuarioService.findById(id);
 	}
 
