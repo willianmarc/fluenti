@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.willian.portal_suporte.entity.ClientePlanos;
+import com.willian.portal_suporte.dto.ClientePlanosDTO;
 import com.willian.portal_suporte.service.ClientePlanosService;
 
 @RestController
@@ -24,22 +23,22 @@ public class ClientePlanosController {
     }
 
     @GetMapping
-    public List<ClientePlanos> listar() {
-        return clientePlanosService.listar();
+    public List<ClientePlanosDTO> listar() {
+        return clientePlanosService.listarClientePlanos();
     }
 
     @GetMapping("/{id}")
-    public ClientePlanos buscarPorId(@PathVariable Long id) {
+    public ClientePlanosDTO buscarPorId(@PathVariable Long id) {
         return clientePlanosService.findById(id);
     }
 
     @PostMapping
-    public ClientePlanos cadastrar(@RequestBody ClientePlanos clientePlanos) {
+    public ClientePlanosDTO cadastrar(@RequestBody ClientePlanosDTO clientePlanos) {
         return clientePlanosService.insert(clientePlanos);
     }
 
     @PutMapping("/{id}")
-    public ClientePlanos atualizar(@PathVariable Long id, @RequestBody ClientePlanos clientePlanos) {
+    public ClientePlanosDTO atualizar(@PathVariable Long id, @RequestBody ClientePlanosDTO clientePlanos) {
         return clientePlanosService.update(id, clientePlanos);
     }
 

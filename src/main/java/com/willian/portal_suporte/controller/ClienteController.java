@@ -4,7 +4,8 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.*;
 
-import com.willian.portal_suporte.entity.Cliente;
+import com.willian.portal_suporte.dto.ClienteDTO;
+
 import com.willian.portal_suporte.service.ClienteService;
 
 @RestController
@@ -18,23 +19,23 @@ public class ClienteController {
     }
 
     @GetMapping
-    public List<Cliente> listarCliente() {
+    public List<ClienteDTO> listarCliente() {
         return clienteService.listarCliente();
     }
 
     @GetMapping("/{id}")
-    public Cliente buscarPorId(@PathVariable Long id) {
+    public ClienteDTO buscarPorId(@PathVariable Long id) {
         return clienteService.findById(id);
     }
 
     @PostMapping
-    public Cliente cadastrar(@RequestBody Cliente cliente) {
-        return clienteService.insert(cliente);
+    public ClienteDTO cadastrar(@RequestBody ClienteDTO dto) {
+        return clienteService.insert(dto);
     }
 
     @PutMapping("/{id}")
-    public Cliente atualizar(@PathVariable Long id, @RequestBody Cliente cliente) {
-        return clienteService.update(id, cliente);
+    public ClienteDTO atualizar(@PathVariable Long id, @RequestBody ClienteDTO dto) {
+        return clienteService.update(id, dto);
     }
 
     @DeleteMapping("/{id}")

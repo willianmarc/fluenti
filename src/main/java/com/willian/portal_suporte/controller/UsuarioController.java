@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.*;
 
 import com.willian.portal_suporte.dto.UsuarioDTO;
-import com.willian.portal_suporte.entity.Usuario;
+
 import com.willian.portal_suporte.service.UsuarioService;
 
 @RestController
@@ -29,12 +29,12 @@ public class UsuarioController {
 	}
 
 	@PostMapping
-	public Usuario cadastrar(@RequestBody Usuario usuario) {
+	public UsuarioDTO cadastrar(@RequestBody UsuarioDTO usuario) {
 		return usuarioService.insert(usuario);
 	}
 
 	@PutMapping("/{id}")
-	public Usuario atualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
+	public UsuarioDTO atualizar(@PathVariable Long id, @RequestBody UsuarioDTO usuario) {
 		return usuarioService.update(id, usuario);
 	}
 

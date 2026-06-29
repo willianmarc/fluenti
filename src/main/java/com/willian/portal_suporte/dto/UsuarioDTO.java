@@ -1,13 +1,12 @@
 package com.willian.portal_suporte.dto;
 
 import com.willian.portal_suporte.entity.Usuario;
-
 public class UsuarioDTO {
 
 	private Long id;
 	private String nome;
 	private String email;
-	private String login;
+
 	private String telefone;
 	private String perfil;
 	private boolean ativo;
@@ -19,7 +18,6 @@ public class UsuarioDTO {
 		this.id = usuario.getId();
 		this.nome = usuario.getNome();
 		this.email = usuario.getEmail();
-		this.login = usuario.getLogin();
 		this.telefone = usuario.getTelefone();
 		this.perfil = usuario.getPerfil();
 		this.ativo = usuario.isAtivo();
@@ -47,14 +45,6 @@ public class UsuarioDTO {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getLogin() {
-		return login;
-	}
-
-	public void setLogin(String login) {
-		this.login = login;
 	}
 
 	public String getTelefone() {

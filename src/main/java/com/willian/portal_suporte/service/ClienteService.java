@@ -1,7 +1,11 @@
 package com.willian.portal_suporte.service;
+
 import java.util.List;
 import org.springframework.stereotype.Service;
+import com.willian.portal_suporte.dto.ClienteDTO;
+
 import com.willian.portal_suporte.entity.Cliente;
+
 import com.willian.portal_suporte.repository.ClienteRepository;
 import com.willian.portal_suporte.service.exceptions.ResourceNotFoundException;
 
@@ -15,32 +19,47 @@ public class ClienteService {
 		this.clienteRepository = clienteRepository;
 	}
 
-	public List<Cliente> listarCliente() {
+	public List<ClienteDTO> listarCliente() {
+		List<Cliente> lista = clienteRepository.findAll();
 
-		return clienteRepository.findAll();
+		return lista.stream().map(ClienteDTO::new).toList();
 	}
 
-	public Cliente findById(Long id) {
-	    return clienteRepository.findById(id)
-	            .orElseThrow(() -> new ResourceNotFoundException(id));
+	public ClienteDTO findById(Long id) {
+		Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+		return new ClienteDTO(cliente);
 	}
 
-	public Cliente insert(Cliente cliente) {
-		return clienteRepository.save(cliente);
+	public ClienteDTO insert(ClienteDTO dto) {
+		Cliente cliente = new Cliente();
+		copiarDtoParaEntidade(dto, cliente);
+		cliente = clienteRepository.save(cliente);
+
+		return new ClienteDTO(cliente);
 	}
 
-	public Cliente update(Long id, Cliente cliente) {
+	public ClienteDTO update(Long id, ClienteDTO dto) {
 		Cliente clienteExistente = clienteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
-		clienteExistente.setNomeEmpresa(cliente.getNomeEmpresa());
-		clienteExistente.setEmail(cliente.getEmail());
-		clienteExistente.setAtivo(cliente.isAtivo());
-		clienteExistente.setTelefone(cliente.getTelefone());
 
-		return clienteRepository.save(clienteExistente);
+		copiarDtoParaEntidade(dto, clienteExistente);
+
+		clienteExistente = clienteRepository.save(clienteExistente);
+
+		return new ClienteDTO(clienteExistente);
 	}
 
 	public void delete(Long id) {
 		clienteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
 		clienteRepository.deleteById(id);
+	}
+
+	private void copiarDtoParaEntidade(ClienteDTO dto, Cliente cliente) {
+
+		cliente.setCodigoCliente(dto.getCodigoCliente());
+		cliente.setNomeEmpresa(dto.getNomeEmpresa());
+		cliente.setEmail(dto.getEmail());
+		cliente.setTelefone(dto.getTelefone());
+		cliente.setAtivo(dto.isAtivo());
+
 	}
 }

@@ -1,10 +1,8 @@
 package com.willian.portal_suporte.controller;
 
 import java.util.List;
-
 import org.springframework.web.bind.annotation.*;
-
-import com.willian.portal_suporte.entity.Plano;
+import com.willian.portal_suporte.dto.PlanoDTO;
 import com.willian.portal_suporte.service.PlanoService;
 
 @RestController
@@ -18,22 +16,22 @@ public class PlanoController {
     }
 
     @GetMapping
-    public List<Plano> listaPlano() {
-        return planoService.listaPlano();
+    public List<PlanoDTO> listaPlano() {
+        return planoService.listarPlano();
     }
 
     @GetMapping("/{id}")
-    public Plano buscarPorId(@PathVariable Long id) {
+    public PlanoDTO buscarPorId(@PathVariable Long id) {
         return planoService.findById(id);
     }
 
     @PostMapping
-    public Plano cadastrar(@RequestBody Plano plano) {
+    public PlanoDTO cadastrar(@RequestBody PlanoDTO plano) {
         return planoService.insert(plano);
     }
 
     @PutMapping("/{id}")
-    public Plano atualizar(@PathVariable Long id, @RequestBody Plano plano) {
+    public PlanoDTO atualizar(@PathVariable Long id, @RequestBody PlanoDTO plano) {
         return planoService.update(id, plano);
     }
 

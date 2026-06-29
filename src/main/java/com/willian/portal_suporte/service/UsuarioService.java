@@ -1,11 +1,9 @@
 package com.willian.portal_suporte.service;
 
 import java.util.List;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.willian.portal_suporte.dto.UsuarioDTO;
-
 import com.willian.portal_suporte.entity.Usuario;
 import com.willian.portal_suporte.repository.UsuarioRepository;
 import com.willian.portal_suporte.service.exceptions.ResourceNotFoundException;
@@ -19,11 +17,9 @@ public class UsuarioService {
 	}
 
 	public List<UsuarioDTO> listarUsuario() {
-	    List<Usuario> lista = usuarioRepository.findAll();
+		List<Usuario> lista = usuarioRepository.findAll();
 
-	    return lista.stream()
-	            .map(UsuarioDTO::new)
-	            .toList();
+		return lista.stream().map(UsuarioDTO::new).toList();
 	}
 
 	public UsuarioDTO findById(Long id) {
@@ -32,23 +28,36 @@ public class UsuarioService {
 		return new UsuarioDTO(usuario);
 	}
 
-	public Usuario insert(Usuario usuario) {
-		return usuarioRepository.save(usuario);
+	public UsuarioDTO insert(UsuarioDTO dto) {
+		Usuario usuarioExistente = new Usuario();
+		copiarDtoParaEntidade(dto, usuarioExistente);
+
+		usuarioExistente = usuarioRepository.save(usuarioExistente);
+
+		return new UsuarioDTO(usuarioExistente);
 	}
 
-	public Usuario update(Long id, Usuario usuario) {
+	public UsuarioDTO update(Long id, UsuarioDTO dto) {
 		Usuario usuarioExistente = usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
-		usuarioExistente.setNome(usuario.getNome());
-		usuarioExistente.setEmail(usuario.getEmail());
-		usuarioExistente.setAtivo(usuario.isAtivo());
-		
-		return usuarioRepository.save(usuarioExistente);
+		copiarDtoParaEntidade(dto,usuarioExistente);
+  		usuarioExistente = usuarioRepository.save(usuarioExistente);
+
+		return new UsuarioDTO(usuarioExistente);
 	}
 
 	public void delete(Long id) {
 		usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
 
 		usuarioRepository.deleteById(id);
+
+	}
+
+	public void copiarDtoParaEntidade(UsuarioDTO dto, Usuario usuario) {
+		usuario.setNome(dto.getNome());
+		usuario.setPerfil(dto.getPerfil());
+		usuario.setEmail(dto.getEmail());
+		usuario.setTelefone(dto.getTelefone());
+		usuario.setAtivo(dto.isAtivo());
 
 	}
 
