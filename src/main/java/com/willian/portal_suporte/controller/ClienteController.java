@@ -37,6 +37,11 @@ public class ClienteController {
     public ClienteDTO atualizar(@PathVariable Long id, @RequestBody ClienteDTO dto) {
         return clienteService.update(id, dto);
     }
+    
+    @PatchMapping("/{id}")
+    public ClienteDTO atualizarPatch(@PathVariable Long id, @RequestBody ClienteDTO dto) {
+        return clienteService.updatePatch(id, dto);
+    }
 
     @DeleteMapping("/{id}")
     public void deletar(@PathVariable Long id) {

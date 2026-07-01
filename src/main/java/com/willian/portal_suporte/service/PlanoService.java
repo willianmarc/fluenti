@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.willian.portal_suporte.dto.PlanoDTO;
 import com.willian.portal_suporte.entity.Plano;
 import com.willian.portal_suporte.repository.PlanoRepository;
+import com.willian.portal_suporte.service.exceptions.DataBaseException;
 import com.willian.portal_suporte.service.exceptions.ResourceNotFoundException;
 
 @Service
@@ -29,14 +30,21 @@ public class PlanoService {
 	}
 
 	public PlanoDTO insert(PlanoDTO dto) {
-		Plano plano = new Plano();
-
+		validarPlano(dto);
+		
+        if(planoRepository.existsByNome(dto.getNomePlano())) {
+        	throw new DataBaseException("Nome do plano ja cadastrado");
+        }
+        
+        Plano plano = new Plano();
 		copiarDtoParaEntidade(dto, plano);
 
 		plano = planoRepository.save(plano);
 
 		return new PlanoDTO(plano);
 	}
+
+	
 
 	public PlanoDTO update(Long id, PlanoDTO dto) {
 		Plano planoExistente = planoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
@@ -59,5 +67,19 @@ public class PlanoService {
 		plano.setLimiteMensagens(dto.getLimiteMensagens());
 		plano.setValorMensal(dto.getValorMensal());
 		plano.setAtivo(dto.isAtivo());
+	}
+	private void validarPlano(PlanoDTO dto) {
+		  if (dto.getNomePlano() == null || dto.getNomePlano().isBlank()) {
+	            throw new DataBaseException("Nome do plano é obrigatório");
+	        }
+
+	        if (dto.getLimiteMensagens() == null || dto.getLimiteMensagens() <= 0) {
+	            throw new DataBaseException("Franquia de mensagens deve ser maior que zero");
+	        }
+
+	        if (dto.getValorMensal() == null || dto.getValorMensal().doubleValue() <= 0) {
+	            throw new DataBaseException("Valor mensal deve ser maior que zero");
+	        }
+		
 	}
 }

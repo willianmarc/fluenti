@@ -37,6 +37,10 @@ public class UsuarioController {
 	public UsuarioDTO atualizar(@PathVariable Long id, @RequestBody UsuarioDTO usuario) {
 		return usuarioService.update(id, usuario);
 	}
+	@PatchMapping("/{id}")
+	public UsuarioDTO atualizarPatch(@PathVariable Long id, @RequestBody UsuarioDTO dto) {
+	    return usuarioService.updatePatch(id, dto);
+	}
 
 	@DeleteMapping("/{id}")
 	public void deletar(@PathVariable Long id) {
